@@ -1,5 +1,6 @@
 import { FaArrowRightLong } from "react-icons/fa6";
 import { bigShoe1 } from "../assets/images";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -24,12 +25,14 @@ function Home() {
           your active life.
         </p>
 
-        <button className="flex justify-center items-center gap-2 px-7 py-4 border font-montserrat text-lg leading-none bg-coral-red text-white border-coral-red rounded-full">
-          Get Started
-          <div className="ml-2">
-            <FaArrowRightLong />
-          </div>
-        </button>
+        <Link to="/fileupload">
+          <button className="flex justify-center items-center gap-2 px-7 py-4 border font-montserrat text-lg leading-none bg-coral-red text-white border-coral-red rounded-full">
+            Get Started
+            <div className="ml-2">
+              <FaArrowRightLong />
+            </div>
+          </button>
+        </Link>
 
         {/* <div className='flex justify-start items-start flex-wrap w-full mt-20 gap-16'>
           {statistics.map((stat, index) => (

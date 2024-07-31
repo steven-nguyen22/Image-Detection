@@ -1,6 +1,7 @@
 import React from "react";
 import { hamburger } from "../assets/icons";
 import { headerLogo } from "../assets/images";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -16,9 +17,12 @@ function Navbar() {
           />
         </a>
         <ul className="flex-1 flex justify-center items-center gap-16 max-lg:hidden">
-          <li className="font-montserrat leading-normal text-lg text-slate-gray">
+          <Link
+            to="/"
+            className="font-montserrat leading-normal text-lg text-slate-gray"
+          >
             Home
-          </li>
+          </Link>
           <li>About Us</li>
           <li>Products</li>
           <li>Contact Us</li>
