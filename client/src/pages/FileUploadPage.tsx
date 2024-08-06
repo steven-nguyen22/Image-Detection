@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import Upload from "../components/Upload";
 import Dropzone from "../components/Dropzone";
+import TestComp from "../components/testapi";
 
 function FileUpload() {
   return (
@@ -12,7 +13,8 @@ function FileUpload() {
         <section className="w-full flex xl:flex-row flex-col justify-center min-h-screen gap-10 max-container">
           <div className="relative xl:w-2/5 flex flex-col justify-center items-start w-full  max-xl:padding-x pt-28">
             {/* <Upload /> */}
-            <Dropzone className="p-16 mt-10 border border-neutral-200" />
+            {/* <Dropzone className="p-16 mt-10 border border-neutral-200" /> */}
+            <TestComp />
           </div>
         </section>
       </div>
