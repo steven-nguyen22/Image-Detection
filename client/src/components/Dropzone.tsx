@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { ArrowUpTrayIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 
 interface FileWithPreview extends File {
   preview: string;
@@ -52,8 +53,39 @@ function Dropzone({ className }: { className: string }) {
     maxFiles: 3,
   });
 
+  function handleUpload(e: React.FormEvent) {
+    e.preventDefault();
+    const fd = new FormData();
+    console.log(files);
+    fd.append("file", files[0]);
+    console.log(fd);
+
+    axios
+      .post("http://localhost:8080/fileupload", fd, {
+        headers: {
+          "Custom-Header": "value",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  const fetchApi = async () => {
+    const response = await axios.get("http://localhost:8080/api/users");
+    console.log(response.data.users);
+  };
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
   return (
-    <form>
+    <form onSubmit={handleUpload}>
       <div {...getRootProps({ className })}>
         <input {...getInputProps()} />
         {isDragActive ? (

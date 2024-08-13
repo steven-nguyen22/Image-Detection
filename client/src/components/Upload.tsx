@@ -14,20 +14,22 @@ function Upload() {
 
     const fd = new FormData();
     fd.append("file", file);
+    console.log(fd);
 
     setMsg("uploading...");
     setProgress((prevState) => {
       return { ...prevState, started: true };
     });
     axios
-      .post("http://httpbin.org/post", fd, {
+      .post("http://localhost:8080/fileupload", fd, {
         onUploadProgress: (progressEvent) => {
           setProgress((prevState) => {
             return { ...prevState, pc: progressEvent.progress * 100 };
           });
         },
         headers: {
-          "Custom-Header": "value",
+          // "Custom-Header": "value",
+          "Content-Type": "application/json",
         },
       })
       .then((res) => {
