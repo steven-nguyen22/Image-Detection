@@ -16,22 +16,32 @@ function Navbar() {
             className="m-0 w-[129px] h-[29px]"
           />
         </a>
-        <ul className="flex-1 flex justify-center items-center gap-16 max-lg:hidden">
-          <Link
-            to="/"
-            className="font-montserrat leading-normal text-lg text-slate-gray"
-          >
-            Home
-          </Link>
-          <li>About Us</li>
-          <li>Products</li>
-          <li>Contact Us</li>
+        <ul className="flex-1 flex justify-end items-center gap-16 max-lg:hidden">
+          <li>
+            <Link
+              to="/"
+              className="font-montserrat leading-normal text-lg text-slate-gray"
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/about"
+              className="font-montserrat leading-normal text-lg text-slate-gray"
+            >
+              About Us
+            </Link>
+          </li>
+
+          {/* <li>Products</li>
+          <li>Contact Us</li> */}
         </ul>
-        <div className="flex gap-2 text-lg leading-normal font-medium font-montserrat max-lg:hidden wide:mr-24">
+        {/* <div className="flex gap-2 text-lg leading-normal font-medium font-montserrat max-lg:hidden wide:mr-24">
           <a href="/">Sign in</a>
           <span>/</span>
           <a href="/">Explore now</a>
-        </div>
+        </div> */}
         <div className="hidden max-lg:block">
           <img src={hamburger} alt="hamburger icon" width={25} height={25} />
         </div>

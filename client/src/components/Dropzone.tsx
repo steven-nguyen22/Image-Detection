@@ -12,9 +12,42 @@ interface RejectedFile {
   errors: { code: string; message: string }[];
 }
 
+// interface ReturnFile extends File {
+//   preview: string;
+// }
+
+interface ReturnFile extends FileWithPreview {}
+
 function Dropzone({ className }: { className: string }) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [rejected, setRejected] = useState<RejectedFile[]>([]);
+  const [returnFiles, setReturnFiles] = useState<ReturnFile[]>([]);
+  const [temp, setTemp] = useState("");
+  const [temp2, setTemp2] = useState<Blob>();
+  const [videoURL, setVideoURL] = useState<string | null>(null);
+
+  const generateVideoThumbnail = (file: File) => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      const video = document.createElement("video");
+
+      // this is important
+      video.autoplay = true;
+      video.muted = true;
+      video.src = URL.createObjectURL(file);
+
+      video.onloadeddata = () => {
+        let ctx = canvas.getContext("2d");
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        ctx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        video.pause();
+        return resolve(canvas.toDataURL("image/png"));
+      };
+    });
+  };
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: RejectedFile[]) => {
@@ -51,6 +84,9 @@ function Dropzone({ className }: { className: string }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     maxFiles: 3,
+    accept: {
+      video_name: [".mp4"],
+    },
   });
 
   function handleUpload(e: React.FormEvent) {
@@ -64,25 +100,33 @@ function Dropzone({ className }: { className: string }) {
       .post("http://localhost:8080/fileupload", fd, {
         headers: {
           "Custom-Header": "value",
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         console.log(res);
+        let matrixBlob = new Blob([res.data], { type: "video/avi" });
+        const videoURL = URL.createObjectURL(matrixBlob);
+        console.log(matrixBlob);
+        console.log(videoURL);
+        setVideoURL(videoURL);
+        // setTemp(imgURL);
+        // setTemp2(matrixBlob);
+        // setReturnFiles([...returnFiles, { ...res.data, preview: imgURL }]);
       })
       .catch((err) => {
         console.error(err);
       });
   }
 
-  const fetchApi = async () => {
-    const response = await axios.get("http://localhost:8080/api/users");
-    console.log(response.data.users);
-  };
+  // const fetchApi = async () => {
+  //   const response = await axios.get("http://localhost:8080/api/users");
+  //   console.log(response.data.users);
+  // };
 
-  useEffect(() => {
-    fetchApi();
-  }, []);
+  // useEffect(() => {
+  //   fetchApi();
+  // }, []);
 
   return (
     <form onSubmit={handleUpload}>
@@ -91,7 +135,7 @@ function Dropzone({ className }: { className: string }) {
         {isDragActive ? (
           <p>Drop the files here ...</p>
         ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>Drag 'n' drop .mp4 files here, or click to select files</p>
         )}
       </div>
 
@@ -110,7 +154,7 @@ function Dropzone({ className }: { className: string }) {
             type="submit"
             className="ml-auto mt-1 text-[12px] uppercase tracking-wider font-bold text-neutral-500 border border-purple-400 rounded-md px-3 hover:bg-purple-400 hover:text-white transition-colors"
           >
-            Upload to Cloudinary
+            Upload Video
           </button>
         </div>
 
@@ -172,6 +216,38 @@ function Dropzone({ className }: { className: string }) {
             </li>
           ))}
         </ul>
+
+        {/* Returned files */}
+        <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
+          Returned Files
+        </h3>
+        {videoURL && (
+          <video controls width={550}>
+            <source src={videoURL} type="video/avi" />
+          </video>
+        )}
+        {/* <div>
+          <img src={temp}></img>
+        </div> */}
+        {/* <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
+          {returnFiles.map((file, index) => (
+            <li key={index} className="relative h-32 rounded-md shadow-lg">
+              <img
+                src={temp}
+                alt={file.name}
+                width={100}
+                height={100}
+                onLoad={() => {
+                  URL.revokeObjectURL(file.preview);
+                }}
+                className="h-full w-full object-contain rounded-md"
+              />
+              <p className="mt-2 text-neutral-500 text-[12px] font-medium">
+                {file.name}
+              </p>
+            </li>
+          ))}
+        </ul> */}
       </section>
     </form>
   );

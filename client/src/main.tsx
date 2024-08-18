@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import FileUpload from "./pages/FileUploadPage.tsx";
+import AboutPage from "./pages/AboutPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/fileupload",
     element: <FileUpload />,
+  },
+  {
+    path: "/about",
+    element: <AboutPage />,
   },
 ]);
 

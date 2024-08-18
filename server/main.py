@@ -1,14 +1,18 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file, send_from_directory
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv, find_dotenv
 from flask_cors import CORS, cross_origin
+from ultralytics import YOLO
+from utils import read_video, save_video
+
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
 # CORS(app)
 
-
+app.config['UPLOAD_FOLDER'] = 'upload_files'
 
 load_dotenv(find_dotenv())
 connection_string = os.environ.get("MONGO_URL")
@@ -22,10 +26,15 @@ print(collections)
 
 
 @app.route('/fileupload', methods=['POST'])
-# @cross_origin(origins='*')
 def insert_doc():
-    video = request.json['file']
-    print(video)
+    # Getting and saving video file locally
+    file = request.files.get('file', '')
+    file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+    fileName = file.filename
+
+    # model = YOLO('yolov8x')
+    # results = model(f'server/upload_files/{fileName}', save=True)
+
     # collection = db.Image_Tracking
     # test_doc = {
     #     "file": video
@@ -33,9 +42,13 @@ def insert_doc():
     # inserted_id = collection.insert_one(test_doc).inserted_id
     # print(inserted_id)
 
-    return 'yer'
+    # Read Video
+    video_frames = read_video(f'server/upload_files/{fileName}')
 
-# insert_doc()
+    # Save video
+    save_video(video_frames, 'server/output_videos/output_video.avi')
+
+    return send_file('output_videos/output_video.avi', as_attachment=True)
 
 @app.route("/api/users", methods=['GET']) 
 def users():
