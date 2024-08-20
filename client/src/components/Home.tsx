@@ -2,8 +2,27 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { bigShoe1 } from "../assets/images";
 import { Link } from "react-router-dom";
 import HoopCanvas from "./BasketballHoop";
+import axios from "axios";
 
 function Home() {
+  async function download() {
+    console.log("yerrr");
+    const response = await axios.get("http://localhost:8080/download", {
+      responseType: "blob",
+    });
+
+    console.log(response);
+    console.log(response.data);
+    window.open(URL.createObjectURL(response.data));
+
+    // console.log(response);
+    // const blob = response.data.blob();
+    // let matrixBlob = new Blob([response.data], { type: "image/jpeg" });
+    // const videoURL = URL.createObjectURL(blob);
+    // console.log(matrixBlob);
+    // console.log(videoURL);
+  }
+
   return (
     <section
       id="home"
@@ -34,6 +53,8 @@ function Home() {
             </div>
           </button>
         </Link>
+
+        <button onClick={download}>download</button>
 
         {/* <div className='flex justify-start items-start flex-wrap w-full mt-20 gap-16'>
           {statistics.map((stat, index) => (

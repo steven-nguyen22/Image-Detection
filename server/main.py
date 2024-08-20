@@ -13,6 +13,7 @@ cors = CORS(app, origins='*')
 # CORS(app)
 
 app.config['UPLOAD_FOLDER'] = 'upload_files'
+app.config['OUTPUT_FOLDER'] = 'output_videos'
 
 load_dotenv(find_dotenv())
 connection_string = os.environ.get("MONGO_URL")
@@ -46,19 +47,39 @@ def insert_doc():
     video_frames = read_video(f'server/upload_files/{fileName}')
 
     # Save video
-    save_video(video_frames, 'server/output_videos/output_video.avi')
+    save_video(video_frames, 'server/output_videos/output_video.mp4')
 
-    return send_file('output_videos/output_video.avi', as_attachment=True)
+    vid = "upload_files/nba_clip2.mp4"
+
+    # return send_file(vid, as_attachment=True)
+    return 'yas'
+
 
 @app.route("/api/users", methods=['GET']) 
 def users():
-    return jsonify({
-        "users": [
-            'steve',
-            'test',
-            'test2'
-        ]
-    })
+    # return send_file('output_videos/output_video.mp4', as_attachment=False)
+    return send_from_directory(app.config['OUTPUT_FOLDER'], 'output_video.mp4', as_attachment=True)
+    # return jsonify({
+    #     "users": [
+    #         'steve',
+    #         'test',
+    #         'test2'
+    #     ]
+    # })
+
+@app.route("/download", methods=['GET'])
+def download_file():
+    # file = "output_videos/output_video.mp4"
+    file = "upload_files/nba_clip2.mp4"
+    return send_file(file, as_attachment=True)
+    # return 'yas'
+
+@app.route("/download2", methods=['GET'])
+def download_files():
+    file = "output_videos/output_video.mp4"
+    # file = "upload_files/nba_clip2.mp4"
+    return send_file(file, as_attachment=True)
+    # return 'yas'
 
 
 
