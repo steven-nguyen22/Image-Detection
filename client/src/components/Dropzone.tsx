@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { ArrowUpTrayIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+// import AdmZip from "adm-zip";
 
 interface FileWithPreview extends File {
   preview: string;
@@ -12,74 +13,47 @@ interface RejectedFile {
   errors: { code: string; message: string }[];
 }
 
-// interface ReturnFile extends File {
-//   preview: string;
-// }
+interface ReturnFile extends File {
+  preview: string;
+}
 
-interface ReturnFile extends FileWithPreview {}
+// interface ReturnFile extends FileWithPreview {}
 
 function Dropzone({ className }: { className: string }) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [rejected, setRejected] = useState<RejectedFile[]>([]);
   const [returnFiles, setReturnFiles] = useState<ReturnFile[]>([]);
-  const [temp, setTemp] = useState("");
-  const [temp2, setTemp2] = useState<Blob>();
-  const [videoURL, setVideoURL] = useState<string | null>(null);
+  const [showImage, setShowImage] = useState(false);
 
-  // const generateVideoThumbnail = (file: File) => {
-  //   return new Promise((resolve) => {
-  //     const canvas = document.createElement("canvas");
-  //     const video = document.createElement("video");
-
-  //     // this is important
-  //     video.autoplay = true;
-  //     video.muted = true;
-  //     video.src = URL.createObjectURL(file);
-
-  //     video.onloadeddata = () => {
-  //       let ctx = canvas.getContext("2d");
-
-  //       canvas.width = video.videoWidth;
-  //       canvas.height = video.videoHeight;
-
-  //       ctx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-  //       video.pause();
-  //       return resolve(canvas.toDataURL("image/png"));
-  //     };
-  //   });
-  // };
-
-  async function download() {
-    console.log("yerrr");
-    const response = await axios.get("http://localhost:8080/download", {
+  async function download_video() {
+    console.log("video download success");
+    const response = await axios.get("http://localhost:8080/download_video", {
       responseType: "blob",
     });
 
     console.log(response);
     console.log(response.data);
+
+    // var zip = new AdmZip(response.data);
+    // var zipEntries = zip.getEntries();
+
+    // // search for "index.html" which should be there
+    // for (var i = 0; i < zipEntries.length; i++) {
+    //   console.log(zip.readAsText(zipEntries[i]));
+    // }
+
     //window.open(URL.createObjectURL(response.data));
-    const videoURL = URL.createObjectURL(response.data);
-    setVideoURL(videoURL);
+    // const videoURL = URL.createObjectURL(response.data);
+    // setVideoURL(videoURL);
 
-    // console.log(response);
-    // const blob = response.data.blob();
-    // let matrixBlob = new Blob([response.data], { type: "image/jpeg" });
-    // const videoURL = URL.createObjectURL(blob);
-    // console.log(matrixBlob);
-    // console.log(videoURL);
-  }
+    setReturnFiles((previousFiles) => [
+      ...previousFiles,
+      Object.assign(response.data, {
+        preview: URL.createObjectURL(response.data),
+      }),
+    ]);
 
-  async function download2() {
-    console.log("yerrr");
-    const response = await axios.get("http://localhost:8080/download2", {
-      responseType: "blob",
-    });
-
-    console.log(response);
-    console.log(response.data);
-    //window.open(URL.createObjectURL(response.data));
-    const videoURL = URL.createObjectURL(response.data);
-    setVideoURL(videoURL);
+    setShowImage(false);
 
     // console.log(response);
     // const blob = response.data.blob();
@@ -133,8 +107,14 @@ function Dropzone({ className }: { className: string }) {
     e.preventDefault();
     const fd = new FormData();
     console.log(files);
+    // Working with multiple files
+    // for (let i = 0; i < files.length; i++) {
+    //   fd.append("file", files[i]);
+    // }
     fd.append("file", files[0]);
     console.log(fd);
+    removeFile(files[0].name);
+    setShowImage(true);
 
     axios
       .post("http://localhost:8080/fileupload", fd, {
@@ -144,49 +124,14 @@ function Dropzone({ className }: { className: string }) {
         },
       })
       .then((res) => {
-        console.log("yer");
+        console.log("Upload success");
         console.log(res);
-        download2();
-        // let matrixBlob = new Blob([res.data], { type: "video/mp4" });
-        // const videoURL = URL.createObjectURL(res.data);
-        // console.log(matrixBlob);
-        //console.log(videoURL);
-        // setVideoURL(videoURL);
-        // setTemp(imgURL);
-        // setTemp2(matrixBlob);
-        // setReturnFiles([...returnFiles, { ...res.data, preview: imgURL }]);
+        download_video();
       })
       .catch((err) => {
         console.error(err);
       });
   }
-
-  // const fetchApi = async () => {
-  //   const response = await axios.get("http://localhost:8080/api/users", {
-  //     headers: {
-  //       responseType: "arraybuffer",
-  //       // responseType: "blob",
-  //     },
-  //   });
-
-  //   console.log(typeof response);
-  //   console.log(response);
-  //   let matrixBlob = new Blob([response.data], { type: "video/mp4" });
-  //   const videoURL = URL.createObjectURL(matrixBlob);
-  //   console.log(matrixBlob);
-  //   console.log(videoURL);
-  //   setVideoURL(videoURL);
-
-  //   // let reader = new  FileReader();
-  //   // reader.readAsArrayBuffer(response.data);
-  //   // reader.onload = () => {
-  //   //   let videoBlob = new Blob([new Uint8Array(reader.result)], { type: 'video/mp4' });
-  //   // }
-  // };
-
-  // useEffect(() => {
-  //   fetchApi();
-  // }, []);
 
   return (
     <div>
@@ -229,7 +174,7 @@ function Dropzone({ className }: { className: string }) {
                 key={file.name}
                 className="relative h-32 rounded-md shadow-lg"
               >
-                <img
+                {/* <img
                   src={file.preview}
                   alt={file.name}
                   width={100}
@@ -238,7 +183,10 @@ function Dropzone({ className }: { className: string }) {
                     URL.revokeObjectURL(file.preview);
                   }}
                   className="h-full w-full object-contain rounded-md"
-                />
+                /> */}
+                <video controls width={550}>
+                  <source src={file.preview} type="video/mp4" />
+                </video>
                 <button
                   type="button"
                   className="w-7 h-7 border border-secondary-400 bg-secondary-400 rounded-full flex justify-center items-center absolute -top-3 -right-3 hover:bg-white transition-colors"
@@ -285,36 +233,24 @@ function Dropzone({ className }: { className: string }) {
           <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
             Returned Files
           </h3>
-          {videoURL && (
-            <video controls width={550}>
-              <source src={videoURL} type="video/mp4" />
-            </video>
+          {returnFiles && (
+            <ul>
+              {returnFiles.map((file) => (
+                <li key={file.preview}>
+                  <video controls width={550} key={file.name}>
+                    <source src={file.preview} type="video/mp4" />
+                  </video>
+                </li>
+              ))}
+            </ul>
           )}
-          {/* <div>
-          <img src={temp}></img>
-        </div> */}
-          {/* <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
-          {returnFiles.map((file, index) => (
-            <li key={index} className="relative h-32 rounded-md shadow-lg">
-              <img
-                src={temp}
-                alt={file.name}
-                width={100}
-                height={100}
-                onLoad={() => {
-                  URL.revokeObjectURL(file.preview);
-                }}
-                className="h-full w-full object-contain rounded-md"
-              />
-              <p className="mt-2 text-neutral-500 text-[12px] font-medium">
-                {file.name}
-              </p>
-            </li>
-          ))}
-        </ul> */}
+          {showImage && (
+            <div className="flex justify-center">
+              <img src="./spinner.svg" />
+            </div>
+          )}
         </section>
       </form>
-      <button onClick={download2}>download</button>
     </div>
   );
 }

@@ -9,11 +9,11 @@ function Navbar() {
       <nav className="flex justify-between items-center max-container">
         <a href="/">
           <img
-            src={headerLogo}
+            src="./logo2.svg"
             alt="logo"
             width={129}
-            height={29}
-            className="m-0 w-[129px] h-[29px]"
+            height={30}
+            className="w-[129px] h-[30px] object-cover mx-auto"
           />
         </a>
         <ul className="flex-1 flex justify-end items-center gap-16 max-lg:hidden">
@@ -31,6 +31,14 @@ function Navbar() {
               className="font-montserrat leading-normal text-lg text-slate-gray"
             >
               About Us
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/fileupload"
+              className="font-montserrat leading-normal text-lg text-slate-gray"
+            >
+              Get Started
             </Link>
           </li>
 

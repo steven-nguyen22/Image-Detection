@@ -12,31 +12,48 @@ from player_ball_assigner import PlayerBallAssigner
 from camera_movement_estimator import CameraMovementEstimator
 from view_transformer import ViewTransformer
 from speed_and_distance_estimator import SpeedAndDistance_Estimator
-
 from werkzeug.utils import secure_filename
+from glob import glob
+from io import BytesIO
+from zipfile import ZipFile
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
 # CORS(app)
 
 app.config['UPLOAD_FOLDER'] = 'upload_files'
-app.config['OUTPUT_FOLDER'] = 'output_videos'
 
-load_dotenv(find_dotenv())
-connection_string = os.environ.get("MONGO_URL")
-client = MongoClient(connection_string)
+# Connecting with MONGODB (not needed)
+# load_dotenv(find_dotenv())
+# connection_string = os.environ.get("MONGO_URL")
+# client = MongoClient(connection_string)
 
 # dbs = client.list_database_names()
 # print(dbs)
-db = client.Sports_Videos
-collections = db.list_collection_names()
-print(collections)
+# db = client.Sports_Videos
+# collections = db.list_collection_names()
+# print(collections)
 
 
 @app.route('/fileupload', methods=['POST'])
 def insert_doc():
+    # Working with multiple files, have to return them as .zip file (working on it)
+    # number = 1
+    # for file in request.files.getlist('file'):
+    #     file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+
+    #     fileName = file.filename
+
+    #     # Read Video
+    #     video_frames = read_video(f'server/upload_files/{fileName}')
+
+    #     # Save video
+    #     save_video(video_frames, f'server/output_videos/output_video{number}.mp4')
+    #     number += 1
+
     # Getting and saving video file locally
     file = request.files.get('file', '')
+    
     file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
     fileName = file.filename
     
@@ -129,31 +146,27 @@ def insert_doc():
     return 'Video Complete'
 
 
-@app.route("/api/users", methods=['GET']) 
-def users():
-    # return send_file('output_videos/output_video.mp4', as_attachment=False)
-    return send_from_directory(app.config['OUTPUT_FOLDER'], 'output_video.mp4', as_attachment=True)
-    # return jsonify({
-    #     "users": [
-    #         'steve',
-    #         'test',
-    #         'test2'
-    #     ]
-    # })
-
-@app.route("/download", methods=['GET'])
-def download_file():
-    # file = "output_videos/output_video.mp4"
-    file = "upload_files/nba_clip2.mp4"
-    return send_file(file, as_attachment=True)
-    # return 'yas'
-
-@app.route("/download2", methods=['GET'])
+# Getting output video
+@app.route("/download_video", methods=['GET'])
 def download_files():
     file = "output_videos/output_video.mp4"
-    # file = "upload_files/nba_clip2.mp4"
     return send_file(file, as_attachment=True)
-    # return 'yas'
+
+    # Trying to return .zip file of multiple files
+    # target = 'output_videos'
+
+    # stream = BytesIO()
+    # with ZipFile(stream, 'w') as zf:
+    #     for file in glob(os.path.join(target, '*.mp4')):
+    #         zf.write(file, os.path.basename(file))
+    # stream.seek(0)
+
+    # return send_file(
+    #     stream,
+    #     as_attachment=True,
+    #     download_name='archive.zip'
+    # )
+
 
 
 

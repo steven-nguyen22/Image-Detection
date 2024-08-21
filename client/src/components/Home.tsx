@@ -1,28 +1,8 @@
 import { FaArrowRightLong } from "react-icons/fa6";
-import { bigShoe1 } from "../assets/images";
 import { Link } from "react-router-dom";
 import HoopCanvas from "./BasketballHoop";
-import axios from "axios";
 
 function Home() {
-  async function download() {
-    console.log("yerrr");
-    const response = await axios.get("http://localhost:8080/download", {
-      responseType: "blob",
-    });
-
-    console.log(response);
-    console.log(response.data);
-    window.open(URL.createObjectURL(response.data));
-
-    // console.log(response);
-    // const blob = response.data.blob();
-    // let matrixBlob = new Blob([response.data], { type: "image/jpeg" });
-    // const videoURL = URL.createObjectURL(blob);
-    // console.log(matrixBlob);
-    // console.log(videoURL);
-  }
-
   return (
     <section
       id="home"
@@ -41,8 +21,9 @@ function Home() {
           <span className="text-coral-red inline-block mt-3">NBA</span> Videos
         </h1>
         <p className="font-montserrat text-slate-gray text-lg leading-8 mt-6 mb-14 sm:max-w-sm">
-          Gain insights on max player speed, total distance ran, and team
-          possession percentage through your basketball videos.
+          Unlock the full potential of your favorite NBA videos with HoopVision,
+          the AI-powered tool that tracks and reveals the hidden stats behind
+          every play.
         </p>
 
         <Link to="/fileupload">
@@ -53,43 +34,10 @@ function Home() {
             </div>
           </button>
         </Link>
-
-        <button onClick={download}>download</button>
-
-        {/* <div className='flex justify-start items-start flex-wrap w-full mt-20 gap-16'>
-          {statistics.map((stat, index) => (
-            <div key={index}>
-              <p className='text-4xl font-palanquin font-bold'>{stat.value}</p>
-              <p className='leading-7 font-montserrat text-slate-gray'>
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>  */}
       </div>
 
       <div className="relative flex-1 flex justify-center items-center xl:min-h-screen max-xl:py-40 bg-my-orange bg-hero bg-cover bg-center">
         <HoopCanvas />
-        {/* <img
-          src={bigShoe1}
-          alt="shoe colletion"
-          width={610}
-          height={502}
-          className="object-contain relative z-10"
-        /> */}
-
-        {/* <div className='flex sm:gap-6 gap-4 absolute -bottom-[5%] sm:left-[10%] max-sm:px-6'>
-          {shoes.map((image, index) => (
-            <div key={index}>
-              <ShoeCard
-                index={index}
-                imgURL={image}
-                changeBigShoeImage={(shoe) => setBigShoeImg(shoe)}
-                bigShoeImg={bigShoeImg}
-              />
-            </div>
-          ))}
-        </div> */}
       </div>
     </section>
   );
