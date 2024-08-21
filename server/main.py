@@ -13,9 +13,6 @@ from camera_movement_estimator import CameraMovementEstimator
 from view_transformer import ViewTransformer
 from speed_and_distance_estimator import SpeedAndDistance_Estimator
 from werkzeug.utils import secure_filename
-from glob import glob
-from io import BytesIO
-from zipfile import ZipFile
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
