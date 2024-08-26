@@ -1,6 +1,4 @@
-import React from "react";
 import { hamburger } from "../assets/icons";
-import { headerLogo } from "../assets/images";
 import { Link } from "react-router-dom";
 
 function Navbar() {

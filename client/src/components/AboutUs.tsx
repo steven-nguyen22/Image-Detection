@@ -1,6 +1,3 @@
-import ReactPlayer from "react-player";
-import { headerLogo } from "../assets/images";
-
 function AboutUs() {
   return (
     <section className="max-container">
