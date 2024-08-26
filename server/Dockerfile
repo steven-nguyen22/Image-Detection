@@ -1,13 +1,9 @@
-FROM python:3-alpine3.17
-
-# RUN addgroup app && adduser -S -G app app
-
-# USER app
+FROM python:3.11.4
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY requirements.txt ./
+# COPY package*.json ./
+COPY requirements.txt /app
 
 RUN pip install -r requirements.txt
 

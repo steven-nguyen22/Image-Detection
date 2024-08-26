@@ -37,7 +37,7 @@ function AboutUs() {
 
       <div className="mt-5 flex justify-center">
         <video controls width={600}>
-          <source src="./videos/nba_clip2.mp4" type="video/mp4" />
+          <source src="./videos/nba_clip3.mp4" type="video/mp4" />
         </video>
         <video controls width={600}>
           <source src="./videos/about_video.mp4" type="video/mp4" />
