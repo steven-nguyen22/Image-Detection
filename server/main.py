@@ -166,6 +166,10 @@ def download_files():
 
 
 
+# for local use
+# if __name__ == "__main__":
+#     app.run(debug=True, port=8080)
 
+# for deployment
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run()
