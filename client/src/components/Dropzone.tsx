@@ -29,7 +29,7 @@ function Dropzone({ className }: { className: string }) {
     console.log("video download success");
     // for local use http://localhost:8080/download_video
     const response = await axios.get(
-      "https://hoopvision.onrender.com/download_video",
+      "https://stevens-hoopvision.onrender.com/download_video",
       {
         responseType: "blob",
       }
@@ -120,9 +120,9 @@ function Dropzone({ className }: { className: string }) {
     removeFile(files[0].name);
     setShowImage(true);
 
+    // for local use http://localhost:8080/fileupload
     axios
-      // for local use http://localhost:8080/fileupload
-      .post("https://hoopvision.onrender.com/fileupload", fd, {
+      .post("https://stevens-hoopvision.onrender.com/fileupload", fd, {
         headers: {
           "Content-Type": "multipart/form-data",
           responseType: "blob",
