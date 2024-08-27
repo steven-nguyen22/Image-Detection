@@ -25,7 +25,11 @@ _Frontend and Backend are hosted on Render._
       docker compose up
 
 Video Demo</br>
-[![Watch the video](https://raw.githubusercontent.com/steven-nguyen22/Image-Detection/main/images/homepage.png)](https://raw.githubusercontent.com/steven-nguyen22/Image-Detection/main/images/demo.mp4)
+
+
+https://github.com/user-attachments/assets/b1a53f83-5bf4-46dc-97ae-d83525507dfb
+
+
 
 About Page</br>
 <img src="images/aboutpage.png" width="800"></br>
