@@ -9,7 +9,7 @@ This application is made possible through the use of Ultralytics' AI
         analytics through its video processing and object detection
         capabilities.
 
-<a href="https://app.roboflow.com/test-hgolu/basketball-training-vafot/2">Link to training set.</a>
+<a href="https://universe.roboflow.com/test-hgolu/basketball-training-vafot/dataset/2">Link to training set.</a>
 
 ## <a href="https://hoopvision.onrender.com"> Deployed on Render </a>
 _Frontend and Backend are hosted on Render._
