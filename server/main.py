@@ -33,6 +33,7 @@ app.config['UPLOAD_FOLDER'] = 'upload_files'
 
 
 @app.route('/fileupload', methods=['POST'])
+@cross_origin()
 def insert_doc():
     # Working with multiple files, have to return them as .zip file (working on it)
     # number = 1
@@ -145,6 +146,7 @@ def insert_doc():
 
 # Getting output video
 @app.route("/download_video", methods=['GET'])
+@cross_origin()
 def download_files():
     file = "output_videos/output_video.mp4"
     return send_file(file, as_attachment=True)
