@@ -167,6 +167,7 @@ def download_files():
     # )
 
 @app.route("/api/users", methods=['GET']) 
+@cross_origin()
 def users():
     # # return send_file('output_videos/output_video.mp4', as_attachment=False)
     # return send_from_directory(app.config['OUTPUT_FOLDER'], 'output_video.mp4', as_attachment=True)
