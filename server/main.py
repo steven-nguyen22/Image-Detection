@@ -166,6 +166,17 @@ def download_files():
     #     download_name='archive.zip'
     # )
 
+@app.route("/api/users", methods=['GET']) 
+def users():
+    # # return send_file('output_videos/output_video.mp4', as_attachment=False)
+    # return send_from_directory(app.config['OUTPUT_FOLDER'], 'output_video.mp4', as_attachment=True)
+    return jsonify({
+        "users": [
+            'steve',
+            'test',
+            'test2'
+        ]
+    })
 
 
 # for local use
