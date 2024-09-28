@@ -1,6 +1,6 @@
-# HoopVision
+# HoopVisionAI
 
-HoopVision is an AI image detection application. You can use it to find max player speed, total distance ran, and team possession percentage through your uploaded NBA basketball clips.
+HoopVisionAI is an AI image detection application. You can use it to find max player speed, total distance ran, and team possession percentage through your uploaded NBA basketball clips.
 
 This application is made possible through the use of Ultralytics' AI
         image detection model, YOLOv8. By training the image detection model
